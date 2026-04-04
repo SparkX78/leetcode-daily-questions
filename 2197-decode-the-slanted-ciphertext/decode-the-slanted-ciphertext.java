@@ -1,32 +1,24 @@
 class Solution {
     public String decodeCiphertext(String encodedText, int rows) {
-        
-        if (rows == 1) return encodedText;
+        int l = encodedText.length();
+        if (rows == 0) return "";
 
-        int n = encodedText.length();
-        int cols = n / rows;
+        int columns = l / rows;
+        StringBuilder originalText = new StringBuilder();
 
-        StringBuilder result = new StringBuilder();
-
-        // Start from each column
-        for (int col = 0; col < cols; col++) {
-            int i = 0, j = col;
-
-            // Traverse diagonally
-            while (i < rows && j < cols) {
-                result.append(encodedText.charAt(i * cols + j));
-                i++;
-                j++;
+        for (int col = 0; col < columns; col++) {
+            for (int j = col; j < l; j += (columns + 1)) {
+                originalText.append(encodedText.charAt(j));
             }
         }
 
-        // Remove trailing spaces
-        int end = result.length() - 1;
-        while (end >= 0 && result.charAt(end) == ' ') {
+        // remove trailing spaces
+        int end = originalText.length() - 1;
+        while (end >= 0 && originalText.charAt(end) == ' ') {
             end--;
         }
 
-        return result.substring(0, end + 1);
+        return originalText.substring(0, end + 1);
     }
 }
     
