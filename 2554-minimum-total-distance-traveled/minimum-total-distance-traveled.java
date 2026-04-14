@@ -29,7 +29,8 @@ class Solution {
         if(dp[ri][fi] != -1){
             return dp[ri][fi];
         }
-        long take = Math.abs(robot.get(ri) - position.get(fi)) + solve(ri+1, fi+1, robot , position);
+        long cost = Math.abs(robot.get(ri) - position.get(fi));
+        long take =  cost + solve(ri+1, fi+1, robot , position);
         long skip = solve(ri, fi+1, robot, position);
         return dp[ri][fi] = Math.min(take, skip);
     }
