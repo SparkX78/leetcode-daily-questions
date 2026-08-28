@@ -1,39 +1,41 @@
 class Solution {
+    public boolean isCycleDFS(HashMap<Integer, List<Integer>> adj, int u, boolean[] visited, boolean[] inRecursion){
+        visited[u] = true;
+        inRecursion[u] = true;
+
+        for(int v : adj.getOrDefault(u, new ArrayList<>())){
+            if(!visited[v] && isCycleDFS(adj, v, visited, inRecursion)){
+                return true;
+            }
+            if(inRecursion[v] == true){
+                return true;
+            }
+            
+
+        }
+        inRecursion[u] = false;
+        return false;
+    }
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
-        int[] indegree = new int[numCourses];
+        HashMap<Integer, List<Integer>> adj = new HashMap<>();
+        boolean[] visited = new boolean[numCourses];
+        boolean[] inRecursion = new boolean[numCourses];
+        Arrays.fill(visited, false);
+        Arrays.fill(inRecursion, false);
         for(int[] vec : prerequisites){
-            int a =vec[0];
+            int a = vec[0];
             int b = vec[1];
 
-            //b-->a
-            map.computeIfAbsent(b, k->new ArrayList<>()).add(a);
-            indegree[a]++;
+            //b ---> a
+            adj.computeIfAbsent(b,k-> new ArrayList()).add(a);
+
         }
-        return topoLogical(map, indegree, numCourses);
-    }
-    public boolean topoLogical(HashMap<Integer, List<Integer>> map, int[] indegree, int n){
-        int count = 0;
-        Queue<Integer> queue = new LinkedList<>();
-        for(int i = 0; i < n; i++){
-            if(indegree[i] == 0){
-                count++;
-                queue.offer(i);
+        for(int i = 0; i < numCourses; i++){
+            if(!visited[i] && isCycleDFS(adj, i, visited, inRecursion)){
+                return false;
             }
+            
         }
-        while(!queue.isEmpty()){
-            int u = queue.poll();
-            for(int v : map.getOrDefault(u, new ArrayList<>()) ){
-                indegree[v]--;
-                if(indegree[v] == 0){
-                    count++;
-                    queue.offer(v);
-                }
-            }
-        }
-        if(count == n){
-            return true;
-        }
-        return false;
+        return true;
     }
 }
