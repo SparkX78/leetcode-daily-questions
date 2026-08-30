@@ -9,7 +9,7 @@ class Solution {
             int u = edge[0];
             int v = edge[1];
             boolean[] visited = new boolean[edges.length+1];
-            if(dfs(adj, u, v, visited)){
+            if(bfs(adj, u, v, n)){
                 return edge;
 
             }
@@ -18,16 +18,21 @@ class Solution {
         }
         return new int[0];
     }
-    public boolean dfs(HashMap<Integer, List<Integer>> adj, int u, int target, boolean[] visited){
-        if(u == target){
-            return true;
-        }
+    public boolean bfs(HashMap<Integer, List<Integer>> adj, int u, int target, int n){
+        
+        boolean[] visited = new boolean[n+1];
         visited[u] = true;
-        for(int neigh : adj.get(u)){
-            if(!visited[neigh]){
-                
-                if(dfs(adj, neigh, target, visited)){
-                    return true;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(u);
+        while(!queue.isEmpty()){
+            int curr = queue.poll();
+            if(curr == target){
+                return true;
+            }
+            for(int neigh : adj.get(curr)){
+                if(!visited[neigh] ){
+                    visited[neigh] = true;
+                    queue.offer(neigh);
                 }
             }
         }
