@@ -1,50 +1,25 @@
-import java.util.*;
-
 class Solution {
     public boolean checkValidString(String s) {
+  int n=s.length();
+  int min=0;
+  int max=0;
+  for(int i=0;i<n;i++){
+   if(s.charAt(i)=='('){
+    min=min+1;
+    max=max+1;
+   }
+   else if(s.charAt(i)==')'){
+    min=min-1;
+    max=max-1;
+   }
+   else{
+    min--;
+    max++;
+   }
+   if(min<0) min=0;
+   if(max<0) return false;
+  }
 
-        Stack<Integer> open = new Stack<>();
-        Stack<Integer> star = new Stack<>();
-
-        for (int i = 0; i < s.length(); i++) {
-
-            char ch = s.charAt(i);
-
-            if (ch == '(') {
-                open.push(i);
-            }
-
-            else if (ch == '*') {
-                star.push(i);
-            }
-
-            else { // ')'
-
-                if (!open.isEmpty()) {
-                    open.pop();
-                }
-                else if (!star.isEmpty()) {
-                    star.pop();
-                }
-                else {
-                    return false;
-                }
-            }
-        }
-
-        // Match remaining '(' with '*' 
-        while (!open.isEmpty() && !star.isEmpty()) {
-
-            int openIndex = open.pop();
-            int starIndex = star.pop();
-
-            // '*' must come AFTER '('
-            if (starIndex < openIndex) {
-                return false;
-            }
-        }
-
-        // If '(' are still left, they cannot be matched
-        return open.isEmpty();
+return (min==0);
     }
 }
